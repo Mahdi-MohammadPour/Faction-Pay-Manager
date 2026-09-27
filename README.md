@@ -27,10 +27,10 @@ player-pay-calculator/
 ```
 
 
-## Payroll additions
+## موارد تکمیلی حقوق
 
-- Each player can be configured as **Member** or **Subleader**.
-- Subleaders use a fixed salary and are excluded from Activity Bonus rankings.
-- Four FW slots are available per player. Each selected FW deducts 10% of that player's salary basis.
-- Activity Bonus ranks only regular members by activity earnings. Default rewards are 3,000,000 / 2,000,000 / 1,000,000 for ranks 1–3 and can be edited in the UI.
-- The final salary shown by the app is: salary basis - FW deduction + Activity Bonus.
+- هر بازیکن می‌تواند در یکی از نقش‌های **عضو (Member)** یا **معاون (Subleader)** تنظیم شود.
+- معاون‌ها حقوق ثابتی دریافت می‌کنند و در رتبه‌بندی «پاداش فعالیت» (Activity Bonus) لحاظ نمی‌شوند.
+- برای هر بازیکن، چهار جایگاه FW در دسترس است. انتخاب هر FW باعث کسر ۱۰ درصد از حقوق پایه آن بازیکن می‌شود.
+- رتبه‌بندی پاداش فعالیت، تنها اعضای عادی را بر اساس درآمد حاصل از فعالیت رده‌بندی می‌کند. پاداش‌های پیش‌فرض برای رتبه‌های ۱ تا ۳ به ترتیب ۳،۰۰۰،۰۰۰، ۲،۰۰۰،۰۰۰ و ۱،۰۰۰،۰۰۰ است که از طریق رابط کاربری (UI) قابل ویرایش هستند.
+- حقوق نهایی نمایش‌داده‌شده در اپلیکیشن عبارت است از: حقوق پایه - کسر مربوط به FW + پاداش فعالیت.

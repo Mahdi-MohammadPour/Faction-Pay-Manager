@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Player Pay Calculator - مدیریت فکشن، پلیرها، آیتم‌ها و حقوق">
+  <title>Player Pay Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Player Pay Manager</h1>
+      <p>مدیریت حقوق پلیرها، فکشن‌ها و فعالیت‌ها</p>
+    </div>
+    <button id="resetAllBtn" class="btn btn-danger">پاک کردن همه داده‌ها</button>
+  </header>
+
+  <main class="container">
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-label">فکشن‌ها</span>
+        <strong id="statFactions">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">پلیرها</span>
+        <strong id="statPlayers">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">آیتم‌ها</span>
+        <strong id="statItems">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">کل پرداختی</span>
+        <strong id="statTotal">$0</strong>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>افزودن فکشن</h2>
+            <p>مثلاً Police یا EMS</p>
+          </div>
+        </div>
+        <form id="factionForm" class="form-grid">
+          <label>
+            نام فکشن
+            <input id="factionName" type="text" placeholder="Police" required maxlength="50">
+          </label>
+          <button class="btn btn-primary" type="submit">افزودن فکشن</button>
+        </form>
+        <div id="factionsList" class="list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>افزودن پلیر</h2>
+            <p>هر پلیر به یک فکشن متصل می‌شود</p>
+          </div>
+        </div>
+        <form id="playerForm" class="form-grid">
+          <label>
+            نام پلیر
+            <input id="playerName" type="text" placeholder="Ali" required maxlength="50">
+          </label>
+          <label>
+            فکشن
+            <select id="playerFaction" required></select>
+          </label>
+          <button class="btn btn-primary" type="submit">افزودن پلیر</button>
+        </form>
+        <div id="playersList" class="list"></div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>افزودن آیتم / فعالیت</h2>
+            <p>قیمت واحد هر فعالیت را مشخص کنید</p>
+          </div>
+        </div>
+        <form id="itemForm" class="form-grid">
+          <label>
+            نام آیتم / فعالیت
+            <input id="itemName" type="text" placeholder="Arrest" required maxlength="50">
+          </label>
+          <label>
+            قیمت واحد
+            <input id="itemPrice" type="number" min="0" step="0.01" placeholder="500" required>
+          </label>
+          <button class="btn btn-primary" type="submit">افزودن آیتم</button>
+        </form>
+        <div id="itemsList" class="list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>ثبت پرداخت / فعالیت</h2>
+            <p>تعداد انجام‌شده را ثبت کنید</p>
+          </div>
+        </div>
+        <form id="paymentForm" class="form-grid">
+          <label>
+            پلیر
+            <select id="paymentPlayer" required></select>
+          </label>
+          <label>
+            آیتم / فعالیت
+            <select id="paymentItem" required></select>
+          </label>
+          <label>
+            تعداد
+            <input id="paymentQuantity" type="number" min="1" step="1" placeholder="1" required>
+          </label>
+          <button class="btn btn-primary" type="submit">ثبت فعالیت</button>
+        </form>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header dashboard-header">
+        <div>
+          <h2>گزارش حقوق پلیرها</h2>
+          <p>جمع کل هر پلیر و جزئیات فعالیت‌های او</p>
+        </div>
+        <div class="toolbar">
+          <input id="playerSearch" type="search" placeholder="جستجوی پلیر...">
+          <select id="factionFilter">
+            <option value="all">همه فکشن‌ها</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="playersReport" class="report-list"></div>
+
+      <div class="grand-total">
+        <span>جمع کل همه پلیرها</span>
+        <strong id="grandTotal">$0</strong>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

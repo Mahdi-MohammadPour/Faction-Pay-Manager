@@ -13,7 +13,12 @@
       <h1>مدیریت حقوق پلیرها</h1>
       <p>مدیریت فکشن‌ها، پلیرها، فعالیت‌ها و محاسبه حقوق</p>
     </div>
-    <button id="resetAllBtn" class="btn btn-danger">حذف همه داده‌ها</button>
+    <div class="topbar-actions">
+      <button id="exportBtn" class="btn btn-primary">📥 خروجی گرفتن</button>
+      <button id="importBtn" class="btn btn-primary">📤 ورود اطلاعات</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+      <button id="resetAllBtn" class="btn btn-danger">حذف همه داده‌ها</button>
+    </div>
   </header>
 
   <main class="container">
@@ -145,6 +150,10 @@
       </div>
     </section>
   </main>
+
+  <footer class="footer">
+    Made by <strong>(_Cg_)</strong> with <span class="heart">♥</span>
+  </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

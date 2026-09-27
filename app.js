@@ -1,4 +1,5 @@
 const STORAGE_KEY = "player-pay-calculator-v1";
+const EXPORT_VERSION = 1;
 const state = loadState();
 
 const els = {
@@ -8,7 +9,8 @@ const els = {
   paymentForm: document.querySelector("#paymentForm"), paymentPlayer: document.querySelector("#paymentPlayer"), paymentItem: document.querySelector("#paymentItem"), paymentQuantity: document.querySelector("#paymentQuantity"),
   playersReport: document.querySelector("#playersReport"), playerSearch: document.querySelector("#playerSearch"), factionFilter: document.querySelector("#factionFilter"),
   statFactions: document.querySelector("#statFactions"), statPlayers: document.querySelector("#statPlayers"), statItems: document.querySelector("#statItems"), statTotal: document.querySelector("#statTotal"), grandTotal: document.querySelector("#grandTotal"),
-  resetAllBtn: document.querySelector("#resetAllBtn"), toast: document.querySelector("#toast")
+  resetAllBtn: document.querySelector("#resetAllBtn"), toast: document.querySelector("#toast"),
+  exportBtn: document.querySelector("#exportBtn"), importBtn: document.querySelector("#importBtn"), importFile: document.querySelector("#importFile")
 };
 
 function defaultState() { return { factions: [], players: [], items: [], payments: [] }; }
@@ -149,6 +151,60 @@ els.factionFilter.addEventListener("change", renderReport);
 els.resetAllBtn.addEventListener("click", () => {
   if (!confirm("تمام فکشن‌ها، پلیرها، آیتم‌ها و سوابق پرداخت حذف شوند؟ این عملیات قابل بازگشت نیست.")) return;
   Object.assign(state, defaultState()); saveState(); renderAll(); showToast("همه داده‌ها پاک شدند.");
+});
+
+/* ---------- خروجی گرفتن ---------- */
+els.exportBtn.addEventListener("click", () => {
+  const payload = {
+    app: "player-pay-calculator",
+    version: EXPORT_VERSION,
+    exportedAt: new Date().toISOString(),
+    data: state
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+  a.href = url;
+  a.download = `player-pay-backup-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast("فایل خروجی دانلود شد.");
+});
+
+/* ---------- ورود اطلاعات ---------- */
+els.importBtn.addEventListener("click", () => els.importFile.click());
+
+els.importFile.addEventListener("change", event => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      const source = parsed && parsed.data ? parsed.data : parsed;
+      const imported = {
+        factions: Array.isArray(source.factions) ? source.factions : [],
+        players: Array.isArray(source.players) ? source.players : [],
+        items: Array.isArray(source.items) ? source.items : [],
+        payments: Array.isArray(source.payments) ? source.payments : []
+      };
+      const totalCount = imported.factions.length + imported.players.length + imported.items.length + imported.payments.length;
+      if (!totalCount) { showToast("فایل خالی است یا ساختار درستی ندارد.", "error"); return; }
+      if (!confirm("اطلاعات فعلی با محتوای این فایل جایگزین شود؟")) return;
+      Object.assign(state, imported);
+      saveState();
+      renderAll();
+      showToast("اطلاعات با موفقیت وارد شد.");
+    } catch (err) {
+      console.error(err);
+      showToast("فایل JSON معتبر نیست.", "error");
+    }
+  };
+  reader.readAsText(file);
+  els.importFile.value = "";
 });
 
 renderAll();

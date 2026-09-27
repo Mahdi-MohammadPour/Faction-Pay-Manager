@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Player Pay Calculator - مدیریت فکشن، پلیرها، آیتم‌ها و حقوق">
-  <title>Player Pay Calculator</title>
+  <meta name="description" content="سامانه مدیریت حقوق پلیرها، فکشن‌ها و فعالیت‌ها">
+  <title>مدیریت حقوق پلیرها</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
     <div>
-      <h1>Player Pay Manager</h1>
-      <p>مدیریت حقوق پلیرها، فکشن‌ها و فعالیت‌ها</p>
+      <h1>مدیریت حقوق پلیرها</h1>
+      <p>مدیریت فکشن‌ها، پلیرها، فعالیت‌ها و محاسبه حقوق</p>
     </div>
-    <button id="resetAllBtn" class="btn btn-danger">پاک کردن همه داده‌ها</button>
+    <button id="resetAllBtn" class="btn btn-danger">حذف همه داده‌ها</button>
   </header>
 
   <main class="container">
@@ -32,7 +32,7 @@
       </article>
       <article class="stat-card">
         <span class="stat-label">کل پرداختی</span>
-        <strong id="statTotal">$0</strong>
+        <strong id="statTotal">0</strong>
       </article>
     </section>
 
@@ -41,7 +41,7 @@
         <div class="panel-header">
           <div>
             <h2>افزودن فکشن</h2>
-            <p>مثلاً Police یا EMS</p>
+            <p>مثلاً پلیس، امداد یا مافیا</p>
           </div>
         </div>
         <form id="factionForm" class="form-grid">
@@ -64,7 +64,7 @@
         <form id="playerForm" class="form-grid">
           <label>
             نام پلیر
-            <input id="playerName" type="text" placeholder="Ali" required maxlength="50">
+            <input id="playerName" type="text" placeholder="علی" required maxlength="50">
           </label>
           <label>
             فکشن
@@ -81,16 +81,16 @@
         <div class="panel-header">
           <div>
             <h2>افزودن آیتم / فعالیت</h2>
-            <p>قیمت واحد هر فعالیت را مشخص کنید</p>
+            <p>مبلغ هر واحد فعالیت را مشخص کنید</p>
           </div>
         </div>
         <form id="itemForm" class="form-grid">
           <label>
             نام آیتم / فعالیت
-            <input id="itemName" type="text" placeholder="Arrest" required maxlength="50">
+            <input id="itemName" type="text" placeholder="دستگیری" required maxlength="50">
           </label>
           <label>
-            قیمت واحد
+            مبلغ هر واحد
             <input id="itemPrice" type="number" min="0" step="0.01" placeholder="500" required>
           </label>
           <button class="btn btn-primary" type="submit">افزودن آیتم</button>
@@ -141,7 +141,7 @@
 
       <div class="grand-total">
         <span>جمع کل همه پلیرها</span>
-        <strong id="grandTotal">$0</strong>
+        <strong id="grandTotal">0</strong>
       </div>
     </section>
   </main>

@@ -14,10 +14,10 @@
       <p>مدیریت فکشن‌ها، پلیرها، فعالیت‌ها و محاسبه حقوق</p>
     </div>
     <div class="topbar-actions">
-      <button id="exportBtn" class="btn btn-primary">📥 خروجی گرفتن</button>
-      <button id="importBtn" class="btn btn-primary">📤 ورود اطلاعات</button>
-      <input id="importFile" type="file" accept="application/json,.json" hidden>
-      <button id="resetAllBtn" class="btn btn-danger">حذف همه داده‌ها</button>
+      <button id="exportBtn" class="btn btn-secondary" type="button">خروجی گرفتن</button>
+      <button id="importBtn" class="btn btn-secondary" type="button">وارد کردن فایل</button>
+      <input id="importFileInput" type="file" accept="application/json,.json" hidden>
+      <button id="resetAllBtn" class="btn btn-danger" type="button">حذف همه داده‌ها</button>
     </div>
   </header>
 
@@ -151,11 +151,11 @@
     </section>
   </main>
 
-  <footer class="footer">
-    Made by <strong>(_Cg_)</strong> with <span class="heart">♥</span>
-  </footer>
-
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <p>Made by <strong>(_Cg_)</strong> with love <span class="heart" aria-hidden="true">&#10084;</span></p>
+  </footer>
 
   <script src="app.js"></script>
 </body>

@@ -25,3 +25,12 @@ player-pay-calculator/
 ├── app.js
 └── README.md
 ```
+
+
+## Payroll additions
+
+- Each player can be configured as **Member** or **Subleader**.
+- Subleaders use a fixed salary and are excluded from Activity Bonus rankings.
+- Four FW slots are available per player. Each selected FW deducts 10% of that player's salary basis.
+- Activity Bonus ranks only regular members by activity earnings. Default rewards are 3,000,000 / 2,000,000 / 1,000,000 for ranks 1–3 and can be edited in the UI.
+- The final salary shown by the app is: salary basis - FW deduction + Activity Bonus.

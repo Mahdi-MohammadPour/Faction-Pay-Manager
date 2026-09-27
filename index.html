@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="سامانه مدیریت حقوق پلیرها، فکشن‌ها و فعالیت‌ها">
+  <meta name="description" content="سامانه مدیریت حقوق پلیرها، فکشن‌ها، FW و بست اکتیویتی">
   <title>مدیریت حقوق پلیرها</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +11,7 @@
   <header class="topbar">
     <div>
       <h1>مدیریت حقوق پلیرها</h1>
-      <p>مدیریت فکشن‌ها، پلیرها، فعالیت‌ها و محاسبه حقوق</p>
+      <p>مدیریت فکشن‌ها، پلیرها، فعالیت‌ها، FW و بست اکتیویتی</p>
     </div>
     <div class="topbar-actions">
       <button id="exportBtn" class="btn btn-secondary" type="button">خروجی گرفتن</button>
@@ -36,7 +36,7 @@
         <strong id="statItems">0</strong>
       </article>
       <article class="stat-card">
-        <span class="stat-label">کل پرداختی</span>
+        <span class="stat-label">کل حقوق نهایی</span>
         <strong id="statTotal">0</strong>
       </article>
     </section>
@@ -46,7 +46,7 @@
         <div class="panel-header">
           <div>
             <h2>افزودن فکشن</h2>
-            <p>مثلاً پلیس، مدیک یا آتش نشانی و دیگر</p>
+            <p>مثلاً پلیس، مدیک یا آتش نشانی</p>
           </div>
         </div>
         <form id="factionForm" class="form-grid">
@@ -63,7 +63,7 @@
         <div class="panel-header">
           <div>
             <h2>افزودن پلیر</h2>
-            <p>هر پلیر به یک فکشن متصل می‌شود</p>
+            <p>هر پلیر به یک فکشن متصل می‌شود؛ بعداً نقش و FW او را تنظیم کنید.</p>
           </div>
         </div>
         <form id="playerForm" class="form-grid">
@@ -85,8 +85,113 @@
       <article class="panel">
         <div class="panel-header">
           <div>
+            <h2>تنظیم حقوق، نقش و FW</h2>
+            <p>۴ FW داریم؛ هر FW دقیقاً ۱۰٪ از مبنای حقوق همان پلیر کم می‌کند.</p>
+          </div>
+        </div>
+
+        <form id="payrollForm" class="form-grid">
+          <label>
+            پلیر
+            <select id="payrollPlayer" required></select>
+          </label>
+
+          <label>
+            نقش
+            <select id="payrollRole" required>
+              <option value="member">ممبر عادی</option>
+              <option value="subleader">ساب‌لیدر</option>
+            </select>
+          </label>
+
+          <label>
+            حقوق ثابت ساب‌لیدر
+            <input id="payrollFixedSalary" type="number" min="0" step="1" value="0">
+            <small id="payrollFixedSalaryHint" class="field-hint">برای ممبر، حقوق از فعالیت‌ها محاسبه می‌شود.</small>
+          </label>
+
+          <div class="fw-config">
+            <div class="fw-title">
+              <span>FWهای پلیر</span>
+              <strong>هر مورد ۱۰٪</strong>
+            </div>
+
+            <div class="fw-grid">
+              <label class="fw-check">
+                <input type="checkbox" data-fw-index="0">
+                <span>FW 1</span>
+              </label>
+              <label class="fw-check">
+                <input type="checkbox" data-fw-index="1">
+                <span>FW 2</span>
+              </label>
+              <label class="fw-check">
+                <input type="checkbox" data-fw-index="2">
+                <span>FW 3</span>
+              </label>
+              <label class="fw-check">
+                <input type="checkbox" data-fw-index="3">
+                <span>FW 4</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="formula-note">
+            حقوق نهایی = مبنای حقوق − کسر FW + بست اکتیویتی
+          </div>
+
+          <button class="btn btn-primary" type="submit">ذخیره تنظیمات پلیر</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>تنظیم بست اکتیویتی</h2>
+            <p>فقط ممبرهای عادی وارد رتبه‌بندی می‌شوند؛ ساب‌لیدر با حقوق ثابت خارج است.</p>
+          </div>
+        </div>
+
+        <form id="bonusSettingsForm" class="form-grid">
+          <label class="switch-row">
+            <span>فعال بودن بست اکتیویتی</span>
+            <input id="bonusEnabled" type="checkbox">
+          </label>
+
+          <div class="bonus-settings-grid">
+            <label>
+              نفر اول
+              <input id="bonusFirst" type="number" min="0" step="1" value="3000000">
+            </label>
+            <label>
+              نفر دوم
+              <input id="bonusSecond" type="number" min="0" step="1" value="2000000">
+            </label>
+            <label>
+              نفر سوم
+              <input id="bonusThird" type="number" min="0" step="1" value="1000000">
+            </label>
+          </div>
+
+          <div class="formula-note">
+            رتبه‌بندی بر اساس جمع فعالیت‌های ممبرها انجام می‌شود. افراد دارای ساب‌لیدر بودن در این رتبه‌بندی شرکت نمی‌کنند.
+          </div>
+
+          <button class="btn btn-primary" type="submit">ذخیره تنظیمات بست</button>
+        </form>
+
+        <div class="section-divider"></div>
+        <div class="subsection-title">۳ نفر اول فعلی</div>
+        <div id="activityBonusList" class="bonus-list"></div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
             <h2>افزودن آیتم / فعالیت</h2>
-            <p>مبلغ هر واحد فعالیت را مشخص کنید</p>
+            <p>مبلغ هر واحد فعالیت را مشخص کنید.</p>
           </div>
         </div>
         <form id="itemForm" class="form-grid">
@@ -107,7 +212,7 @@
         <div class="panel-header">
           <div>
             <h2>ثبت پرداخت / فعالیت</h2>
-            <p>تعداد انجام‌شده را ثبت کنید</p>
+            <p>تعداد انجام‌شده را برای ممبر یا هر پلیر ثبت کنید.</p>
           </div>
         </div>
         <form id="paymentForm" class="form-grid">
@@ -132,7 +237,7 @@
       <div class="panel-header dashboard-header">
         <div>
           <h2>گزارش حقوق پلیرها</h2>
-          <p>جمع کل هر پلیر و جزئیات فعالیت‌های او</p>
+          <p>مبنای حقوق، FW، بست اکتیویتی و حقوق نهایی هر پلیر</p>
         </div>
         <div class="toolbar">
           <input id="playerSearch" type="search" placeholder="جستجوی پلیر...">
@@ -145,7 +250,7 @@
       <div id="playersReport" class="report-list"></div>
 
       <div class="grand-total">
-        <span>جمع کل همه پلیرها</span>
+        <span>جمع کل همه حقوق‌های نهایی</span>
         <strong id="grandTotal">0</strong>
       </div>
     </section>

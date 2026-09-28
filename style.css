@@ -143,6 +143,96 @@ input:disabled {
   justify-content: flex-end;
 }
 
+
+.payment-status-btn {
+  border: 1px solid var(--border);
+  background: rgba(13, 20, 37, .8);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .8rem;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
+}
+
+.payment-status-btn:hover,
+.payment-status-icon-btn:hover { transform: translateY(-1px); }
+
+.payment-status-btn.is-paid {
+  color: #bdf3df;
+  border-color: rgba(56, 199, 147, .4);
+  background: rgba(56, 199, 147, .1);
+}
+
+.payment-status-btn.is-unpaid {
+  color: #ffd4d8;
+  border-color: rgba(227, 93, 106, .4);
+  background: rgba(227, 93, 106, .1);
+}
+
+.payment-status-icon,
+.payment-status-icon-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 900;
+}
+
+.payment-status-icon {
+  background: currentColor;
+  color: var(--panel-2);
+}
+
+.payment-status-icon-btn {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: rgba(13, 20, 37, .8);
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+.payment-status-icon-btn.is-paid {
+  color: #bdf3df;
+  border-color: rgba(56, 199, 147, .45);
+  background: rgba(56, 199, 147, .1);
+}
+
+.payment-status-icon-btn.is-unpaid {
+  color: #ffd4d8;
+  border-color: rgba(227, 93, 106, .45);
+  background: rgba(227, 93, 106, .1);
+}
+
+.player-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.player-name-row h3 {
+  margin: 0;
+}
+
+.payment-status-text {
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.payment-status-text.is-paid { color: #bdf3df; }
+.payment-status-text.is-unpaid { color: #ffd4d8; }
+
+@media (max-width: 640px) {
+  .payment-status-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .field-hint {
   color: var(--muted);
   font-size: .78rem;

@@ -79,7 +79,8 @@ function createDefaultPlayer(raw = {}) {
     ...raw,
     role: raw.role === "subleader" ? "subleader" : "member",
     fixedSalary: toMoneyNumber(raw.fixedSalary),
-    fwFlags
+    fwFlags,
+    paid: Boolean(raw.paid)
   };
 }
 
@@ -168,7 +169,10 @@ function playerActivityTotal(playerId) {
 }
 
 function playerBaseSalary(player) {
-  return player.role === "subleader" ? toMoneyNumber(player.fixedSalary) : playerActivityTotal(player.id);
+  const activityTotal = playerActivityTotal(player.id);
+  return player.role === "subleader"
+    ? toMoneyNumber(player.fixedSalary) + activityTotal
+    : activityTotal;
 }
 
 function playerFwDeduction(player) {
@@ -210,7 +214,7 @@ function overallTotal() {
 function exportState() {
   const payload = {
     app: "player-pay-calculator",
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     data: state
   };
@@ -344,6 +348,16 @@ function renderPlayers() {
           </div>
         </div>
         <div class="list-item-actions">
+          <button
+            class="payment-status-btn ${player.paid ? "is-paid" : "is-unpaid"}"
+            type="button"
+            title="${player.paid ? "علامت‌گذاری به‌عنوان پرداخت‌نشده" : "علامت‌گذاری به‌عنوان پرداخت‌شده"}"
+            aria-label="${player.paid ? "علامت‌گذاری به‌عنوان پرداخت‌نشده" : "علامت‌گذاری به‌عنوان پرداخت‌شده"}"
+            data-toggle-paid="${player.id}"
+          >
+            <span class="payment-status-icon">${player.paid ? "✓" : "!"}</span>
+            <span>${player.paid ? "پرداخت شد" : "پرداخت نشده"}</span>
+          </button>
           <button class="btn btn-secondary btn-small" data-edit-player="${player.id}">تنظیم حقوق</button>
           <button class="btn btn-danger btn-small" data-delete-player="${player.id}">حذف</button>
         </div>
@@ -440,7 +454,7 @@ function syncPayrollForm() {
   els.payrollFixedSalary.value = toMoneyNumber(player.fixedSalary);
   els.payrollFixedSalary.disabled = player.role !== "subleader";
   els.payrollFixedSalaryHint.textContent = player.role === "subleader"
-    ? "حقوق ثابت ساب‌لیدر را وارد کنید؛ ساب‌لیدر در بست اکتیویتی محاسبه نمی‌شود."
+    ? "حقوق ثابت ساب‌لیدر را وارد کنید؛ فعالیت‌های ثبت‌شده نیز به حقوق او اضافه می‌شوند، اما در بست اکتیویتی رتبه‌بندی نمی‌شود."
     : "مبلغ حقوق ممبر از فعالیت‌ها به‌دست می‌آید؛ این فیلد برای ممبر استفاده نمی‌شود.";
 
   els.fwChecks.forEach((check, index) => {
@@ -537,14 +551,24 @@ function renderReport() {
       : `<span class="salary-chip">بدون بست اکتیویتی</span>`;
 
     const roleChip = player.role === "subleader"
-      ? `<span class="salary-chip salary-role">ساب‌لیدر · حقوق ثابت</span>`
+      ? `<span class="salary-chip salary-role">ساب‌لیدر · ثابت + فعالیت</span>`
       : `<span class="salary-chip salary-role">ممبر · فعالیتی${ranking >= 0 ? ` · رتبه ${ranking + 1}` : ""}</span>`;
 
     return `
       <article class="player-card">
         <div class="player-summary">
           <div class="player-info">
-            <h3>${escapeHtml(player.name)}</h3>
+            <div class="player-name-row">
+              <h3>${escapeHtml(player.name)}</h3>
+              <button
+                class="payment-status-icon-btn ${player.paid ? "is-paid" : "is-unpaid"}"
+                type="button"
+                title="${player.paid ? "علامت‌گذاری به‌عنوان پرداخت‌نشده" : "علامت‌گذاری به‌عنوان پرداخت‌شده"}"
+                aria-label="${player.paid ? "علامت‌گذاری به‌عنوان پرداخت‌نشده" : "علامت‌گذاری به‌عنوان پرداخت‌شده"}"
+                data-toggle-paid="${player.id}"
+              >${player.paid ? "✓" : "!"}</button>
+              <span class="payment-status-text ${player.paid ? "is-paid" : "is-unpaid"}">${player.paid ? "پرداخت شده" : "پرداخت نشده"}</span>
+            </div>
             <span>${escapeHtml(faction?.name || "بدون فکشن")} · ${escapeHtml(roleLabel(player))} · ${money(payments.length)} رکورد</span>
           </div>
           <div class="player-total">${money(finalSalary)}</div>
@@ -554,7 +578,7 @@ function renderReport() {
           <div class="salary-box">
             <span>مبنای حقوق</span>
             <strong>${money(base)}</strong>
-            <small>${player.role === "subleader" ? "حقوق ثابت ساب‌لیدر" : `جمع فعالیت‌ها: ${money(activity)}`}</small>
+            <small>${player.role === "subleader" ? `حقوق ثابت: ${money(toMoneyNumber(player.fixedSalary))} + فعالیت‌ها: ${money(activity)}` : `جمع فعالیت‌ها: ${money(activity)}`}</small>
           </div>
           <div class="salary-box">
             <span>FW</span>
@@ -633,7 +657,8 @@ els.playerForm.addEventListener("submit", event => {
     factionId,
     role: "member",
     fixedSalary: 0,
-    fwFlags: Array(MAX_FW).fill(false)
+    fwFlags: Array(MAX_FW).fill(false),
+    paid: false
   });
 
   saveState();
@@ -702,7 +727,7 @@ els.payrollRole.addEventListener("change", () => {
   const isSubleader = els.payrollRole.value === "subleader";
   els.payrollFixedSalary.disabled = !isSubleader;
   els.payrollFixedSalaryHint.textContent = isSubleader
-    ? "حقوق ثابت ساب‌لیدر را وارد کنید؛ ساب‌لیدر در بست اکتیویتی محاسبه نمی‌شود."
+    ? "حقوق ثابت ساب‌لیدر را وارد کنید؛ فعالیت‌های ثبت‌شده نیز به حقوق او اضافه می‌شوند، اما در بست اکتیویتی رتبه‌بندی نمی‌شود."
     : "مبلغ حقوق ممبر از فعالیت‌ها به‌دست می‌آید؛ این فیلد برای ممبر استفاده نمی‌شود.";
 });
 
@@ -753,11 +778,25 @@ els.bonusSettingsForm.addEventListener("submit", event => {
 });
 
 document.addEventListener("click", event => {
-  const deleteFactionId = event.target.dataset.deleteFaction;
-  const deletePlayerId = event.target.dataset.deletePlayer;
-  const editPlayerId = event.target.dataset.editPlayer;
-  const deleteItemId = event.target.dataset.deleteItem;
-  const deletePaymentId = event.target.dataset.deletePayment;
+  const target = event.target instanceof Element ? event.target : null;
+  const deleteFactionId = target?.dataset.deleteFaction;
+  const deletePlayerId = target?.dataset.deletePlayer;
+  const editPlayerId = target?.dataset.editPlayer;
+  const deleteItemId = target?.dataset.deleteItem;
+  const deletePaymentId = target?.dataset.deletePayment;
+  const paidToggle = target?.closest("[data-toggle-paid]");
+  const togglePaidPlayerId = paidToggle?.dataset.togglePaid;
+
+  if (togglePaidPlayerId) {
+    const player = getPlayer(togglePaidPlayerId);
+    if (!player) return;
+
+    player.paid = !player.paid;
+    saveState();
+    renderAll();
+    showToast(player.paid ? `پرداخت ${player.name} ثبت شد.` : `وضعیت ${player.name} به پرداخت‌نشده تغییر کرد.`);
+    return;
+  }
 
   if (editPlayerId) {
     updatePayrollPlayer(editPlayerId);
